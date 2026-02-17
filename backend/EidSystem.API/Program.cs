@@ -19,23 +19,24 @@ var builder = WebApplication.CreateBuilder(args);
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-// Add DbContext with URL format conversion
-var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+// Add DbContext with proper priority
+var rawConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL")  // Check env first!
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");  // Then appsettings
 
+Console.WriteLine($"DATABASE_URL env var: {Environment.GetEnvironmentVariable("DATABASE_URL")}");
 Console.WriteLine($"Raw connection string: {rawConnectionString}");
 
 // Convert Railway's postgresql:// URL to Npgsql format
 string connectionString = rawConnectionString ?? "";
 
-if (!string.IsNullOrEmpty(connectionString) &&
+if (!string.IsNullOrEmpty(connectionString) && 
     (connectionString.StartsWith("postgresql://") || connectionString.StartsWith("postgres://")))
 {
     try
     {
         var uri = new Uri(connectionString);
         var userInfo = uri.UserInfo.Split(':');
-
+        
         connectionString = $"Host={uri.Host};" +
                           $"Port={uri.Port};" +
                           $"Database={uri.AbsolutePath.TrimStart('/')};" +
@@ -43,16 +44,19 @@ if (!string.IsNullOrEmpty(connectionString) &&
                           $"Password={userInfo[1]};" +
                           $"SSL Mode=Require;" +
                           $"Trust Server Certificate=true";
-
-        Console.WriteLine($"Converted to Npgsql format successfully");
+        
+        Console.WriteLine($"Converted to Npgsql format: Host={uri.Host}, Database={uri.AbsolutePath.TrimStart('/')}");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error converting connection string: {ex.Message}");
+        throw;
     }
 }
-
-Console.WriteLine($"Final connection string format: Host={connectionString.Split(';')[0]}");
+else
+{
+    Console.WriteLine($"Using connection string as-is (not a postgresql:// URL)");
+}
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -61,6 +65,7 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
 
 
 // Add Repositories
