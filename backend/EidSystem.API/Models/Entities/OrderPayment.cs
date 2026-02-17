@@ -9,7 +9,7 @@ public class OrderPayment
     public bool IsRefund { get; set; } = false;
     public string? Notes { get; set; }
     public int CreatedBy { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation
     public virtual Order Order { get; set; } = null!;

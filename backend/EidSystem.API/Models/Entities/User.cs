@@ -8,7 +8,7 @@ public class User
     public string FullName { get; set; } = string.Empty;
     public string Role { get; set; } = "call_center"; // admin, call_center, order_reviewer
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
     // Navigation

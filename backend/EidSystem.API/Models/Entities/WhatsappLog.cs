@@ -10,7 +10,7 @@ public class WhatsappLog
     public string MessageContent { get; set; } = string.Empty;
     public string Status { get; set; } = "pending"; // pending, sent, delivered, failed
     public string? ErrorMessage { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? SentAt { get; set; }
 
     // Navigation Properties

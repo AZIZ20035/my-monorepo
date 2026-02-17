@@ -8,7 +8,7 @@ public class CustomerAddress
     public string AddressDetails { get; set; } = string.Empty;
     public string? Label { get; set; } // البيت، الشغل
     public bool IsDefault { get; set; } = false;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation
     public virtual Customer Customer { get; set; } = null!;

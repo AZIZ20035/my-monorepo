@@ -46,7 +46,7 @@ public class UserService : IUserService
             FullName = request.FullName,
             Role = request.Role,
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _userRepository.AddAsync(user);
@@ -62,7 +62,7 @@ public class UserService : IUserService
         if (request.FullName != null) user.FullName = request.FullName;
         if (request.Role != null) user.Role = request.Role;
         if (request.IsActive.HasValue) user.IsActive = request.IsActive.Value;
-        user.UpdatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.UtcNow;
 
         await _userRepository.UpdateAsync(user);
         return MapToResponse(user);
@@ -75,7 +75,7 @@ public class UserService : IUserService
             throw new NotFoundException("User", id);
 
         user.IsActive = false;
-        user.UpdatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.UtcNow;
         await _userRepository.UpdateAsync(user);
     }
 
@@ -86,7 +86,7 @@ public class UserService : IUserService
             throw new NotFoundException("User", id);
 
         user.PasswordHash = _passwordHasher.HashPassword(newPassword);
-        user.UpdatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.UtcNow;
         await _userRepository.UpdateAsync(user);
     }
 

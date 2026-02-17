@@ -144,7 +144,7 @@ public class KitchenController : ControllerBase
             return BadRequest(ApiResponse<object>.ErrorResponse("حالة غير صالحة"));
 
         order.Status = request.Status;
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return Ok(ApiResponse<object>.SuccessResponse(null!, $"تم تحديث حالة الطلب إلى {request.Status}"));

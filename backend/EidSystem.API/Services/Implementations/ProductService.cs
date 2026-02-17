@@ -51,7 +51,7 @@ public class ProductService : IProductService
             PlateOption = request.PlateOption,
             SortOrder = request.SortOrder,
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _productRepository.AddAsync(product);
@@ -66,7 +66,7 @@ public class ProductService : IProductService
                 PortionId = price.PortionId,
                 Price = price.Price,
                 IsActive = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             _context.ProductPrices.Add(productPrice);
         }
@@ -100,7 +100,7 @@ public class ProductService : IProductService
         if (request.PlateOption != null) product.PlateOption = request.PlateOption;
         if (request.IsActive.HasValue) product.IsActive = request.IsActive.Value;
         if (request.SortOrder.HasValue) product.SortOrder = request.SortOrder.Value;
-        product.UpdatedAt = DateTime.Now;
+        product.UpdatedAt = DateTime.UtcNow;
 
         await _productRepository.UpdateAsync(product);
         return await GetByIdAsync(id);
@@ -113,7 +113,7 @@ public class ProductService : IProductService
             throw new NotFoundException("Product", id);
 
         product.IsActive = false;
-        product.UpdatedAt = DateTime.Now;
+        product.UpdatedAt = DateTime.UtcNow;
         await _productRepository.UpdateAsync(product);
     }
 
@@ -131,7 +131,7 @@ public class ProductService : IProductService
             PortionId = request.PortionId,
             Price = request.Price,
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.ProductPrices.Add(price);
@@ -148,7 +148,7 @@ public class ProductService : IProductService
 
         if (request.Price.HasValue) price.Price = request.Price.Value;
         if (request.IsActive.HasValue) price.IsActive = request.IsActive.Value;
-        price.UpdatedAt = DateTime.Now;
+        price.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
         return MapPriceToResponse(price);
@@ -161,7 +161,7 @@ public class ProductService : IProductService
             throw new NotFoundException("ProductPrice", priceId);
 
         price.IsActive = false;
-        price.UpdatedAt = DateTime.Now;
+        price.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
     }
 

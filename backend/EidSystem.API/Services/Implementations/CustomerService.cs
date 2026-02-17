@@ -68,7 +68,7 @@ public class CustomerService : ICustomerService
             Notes = request.Notes,
             ServiceStatus = "not_served",
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _customerRepository.AddAsync(customer);
@@ -82,7 +82,7 @@ public class CustomerService : ICustomerService
                 AddressDetails = request.Address.AddressDetails,
                 Label = request.Address.Label,
                 IsDefault = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             _context.CustomerAddresses.Add(address);
             await _context.SaveChangesAsync();
@@ -104,7 +104,7 @@ public class CustomerService : ICustomerService
         if (request.ServiceStatus != null) customer.ServiceStatus = request.ServiceStatus;
         if (request.Notes != null) customer.Notes = request.Notes;
         if (request.IsActive.HasValue) customer.IsActive = request.IsActive.Value;
-        customer.UpdatedAt = DateTime.Now;
+        customer.UpdatedAt = DateTime.UtcNow;
 
         await _customerRepository.UpdateAsync(customer);
         return await GetByIdAsync(id);
@@ -132,7 +132,7 @@ public class CustomerService : ICustomerService
             AddressDetails = request.AddressDetails,
             Label = request.Label,
             IsDefault = request.IsDefault,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.CustomerAddresses.Add(address);

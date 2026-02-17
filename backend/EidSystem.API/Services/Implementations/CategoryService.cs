@@ -45,7 +45,7 @@ public class CategoryService : ICategoryService
             Description = request.Description,
             SortOrder = request.SortOrder,
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _categoryRepository.AddAsync(category);
@@ -63,7 +63,7 @@ public class CategoryService : ICategoryService
         if (request.Description != null) category.Description = request.Description;
         if (request.IsActive.HasValue) category.IsActive = request.IsActive.Value;
         if (request.SortOrder.HasValue) category.SortOrder = request.SortOrder.Value;
-        category.UpdatedAt = DateTime.Now;
+        category.UpdatedAt = DateTime.UtcNow;
 
         await _categoryRepository.UpdateAsync(category);
         return MapToResponse(category);
@@ -76,7 +76,7 @@ public class CategoryService : ICategoryService
             throw new NotFoundException("Category", id);
 
         category.IsActive = false;
-        category.UpdatedAt = DateTime.Now;
+        category.UpdatedAt = DateTime.UtcNow;
         await _categoryRepository.UpdateAsync(category);
     }
 

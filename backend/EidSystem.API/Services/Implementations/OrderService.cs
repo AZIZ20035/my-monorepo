@@ -165,7 +165,7 @@ public class OrderService : IOrderService
             Status = "pending",
             Notes = request.Notes,
             CreatedBy = userId,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Items = orderItems
         };
 
@@ -180,7 +180,7 @@ public class OrderService : IOrderService
                 Amount = request.PaidAmount,
                 PaymentMethod = "cash",
                 CreatedBy = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             _context.OrderPayments.Add(payment);
             await _context.SaveChangesAsync();
@@ -225,7 +225,7 @@ public class OrderService : IOrderService
             await _periodRepository.IncrementOrdersAsync(request.EidDayPeriodId.Value);
         }
 
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
         await _orderRepository.UpdateAsync(order);
 
         return await GetByIdAsync(id);
@@ -239,7 +239,7 @@ public class OrderService : IOrderService
 
         var oldStatus = order.Status;
         order.Status = status;
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
 
         await _orderRepository.UpdateAsync(order);
         await _activityLogRepository.LogAsync(userId, "update_status", "orders", id, 
@@ -256,7 +256,7 @@ public class OrderService : IOrderService
             throw new BusinessException("لا يمكن إلغاء طلب تم تسليمه");
 
         order.Status = "cancelled";
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
 
         await _orderRepository.UpdateAsync(order);
         await _periodRepository.DecrementOrdersAsync(order.EidDayPeriodId);
@@ -277,7 +277,7 @@ public class OrderService : IOrderService
             IsRefund = request.IsRefund,
             Notes = request.Notes,
             CreatedBy = userId,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.OrderPayments.Add(payment);
@@ -290,7 +290,7 @@ public class OrderService : IOrderService
 
         order.RemainingAmount = order.TotalCost - order.PaidAmount;
         order.PaymentStatus = DeterminePaymentStatus(order.PaidAmount, order.TotalCost);
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 

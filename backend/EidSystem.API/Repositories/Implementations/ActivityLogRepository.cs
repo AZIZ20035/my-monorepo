@@ -28,7 +28,7 @@ public class ActivityLogRepository : GenericRepository<ActivityLog>, IActivityLo
             EntityId = entityId,
             OldValues = oldValues != null ? JsonSerializer.Serialize(oldValues, options) : null,
             NewValues = newValues != null ? JsonSerializer.Serialize(newValues, options) : null,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _context.ActivityLogs.AddAsync(log);

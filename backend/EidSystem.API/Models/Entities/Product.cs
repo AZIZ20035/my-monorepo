@@ -10,7 +10,7 @@ public class Product
     public string PlateOption { get; set; } = "none"; // none, fixed, choice
     public bool IsActive { get; set; } = true;
     public int SortOrder { get; set; } = 0;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
     // Navigation

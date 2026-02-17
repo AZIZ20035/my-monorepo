@@ -17,7 +17,7 @@ public class Order
     public string Status { get; set; } = "pending"; // pending, confirmed, preparing, ready, delivered, cancelled
     public string? Notes { get; set; }
     public int CreatedBy { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 
     // Navigation

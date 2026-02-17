@@ -90,7 +90,7 @@ public class WhatsAppService : IWhatsAppService
             MessageContent = content,
             MessageType = "text",
             Status = "pending",
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         try
@@ -110,7 +110,7 @@ public class WhatsAppService : IWhatsAppService
             );
 
             log.Status = "sent";
-            log.SentAt = DateTime.Now;
+            log.SentAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             
             return true;

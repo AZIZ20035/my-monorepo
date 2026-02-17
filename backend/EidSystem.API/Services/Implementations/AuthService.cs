@@ -47,7 +47,7 @@ public class AuthService : IAuthService
                 IsActive = user.IsActive,
                 CreatedAt = user.CreatedAt
             },
-            ExpiresAt = DateTime.Now.AddDays(7)
+            ExpiresAt = DateTime.UtcNow.AddDays(7)
         };
     }
 
@@ -80,7 +80,7 @@ public class AuthService : IAuthService
             throw new BusinessException("كلمة المرور الحالية غير صحيحة");
 
         user.PasswordHash = _passwordHasher.HashPassword(request.NewPassword);
-        user.UpdatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.UtcNow;
 
         await _userRepository.UpdateAsync(user);
     }

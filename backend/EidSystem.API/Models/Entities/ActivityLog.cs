@@ -10,7 +10,7 @@ public class ActivityLog
     public string? OldValues { get; set; } // JSON
     public string? NewValues { get; set; } // JSON
     public string? IpAddress { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation
     public virtual User User { get; set; } = null!;

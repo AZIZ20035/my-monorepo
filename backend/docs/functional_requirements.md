@@ -677,7 +677,7 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
         if (order != null)
         {
             order.Status = status;
-            order.UpdatedAt = DateTime.Now;
+            order.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
     }
@@ -763,7 +763,7 @@ public class OrderService : IOrderService
             Status = "pending",
             Notes = request.Notes,
             CreatedBy = userId,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
         
         // 6. Add Items
@@ -938,7 +938,7 @@ public static async Task SeedAdminUser(AppDbContext context, IPasswordHasher has
             FullName = "مدير النظام",
             Role = "admin",
             IsActive = true,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
         context.Users.Add(admin);
         await context.SaveChangesAsync();
