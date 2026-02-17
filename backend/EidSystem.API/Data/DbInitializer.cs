@@ -2,7 +2,9 @@ using EidSystem.API.Models.Entities;
 using EidSystem.API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace EidSystem.API.Data;
+
 
 public static class DbInitializer
 {
@@ -10,14 +12,17 @@ public static class DbInitializer
     {
         Console.WriteLine("[DbInitializer] Starting database initialization...");
 
+
         // Ensure database is created - Removing this as we use Migrate() in Program.cs
         // await context.Database.EnsureCreatedAsync();
+
 
         // Seed Admin User
         await SeedAdminUser(context, hasher);
         
         // Seed Normal Users
         await SeedNormalUsers(context, hasher);
+
 
         // Seed Lookup Data
         Console.WriteLine("[DbInitializer] Seeding lookup data...");
@@ -34,11 +39,13 @@ public static class DbInitializer
         await SeedEidDayPeriods(context);
         await SeedTestData(context);
 
+
         // Print helper IDs for the developer
         var testCustomer = await context.Customers.OrderBy(c => c.CustomerId).FirstOrDefaultAsync();
         var testAddress = await context.CustomerAddresses.OrderBy(a => a.AddressId).FirstOrDefaultAsync();
         var testPeriod = await context.EidDayPeriods.OrderBy(p => p.EidDayPeriodId).FirstOrDefaultAsync();
         var testPrice = await context.ProductPrices.OrderBy(p => p.ProductPriceId).FirstOrDefaultAsync();
+
 
         Console.WriteLine("=================================================");
         Console.WriteLine("🚀 USE THESE IDs IN SWAGGER FOR TESTING:");
@@ -48,8 +55,10 @@ public static class DbInitializer
         Console.WriteLine($"   ProductPriceId: {testPrice?.ProductPriceId}");
         Console.WriteLine("=================================================");
 
+
         Console.WriteLine("[DbInitializer] Database initialization completed successfully.");
     }
+
 
     private static async Task SeedAdminUser(AppDbContext context, IPasswordHasher hasher)
     {
@@ -58,7 +67,9 @@ public static class DbInitializer
         var adminPassword = "admin1234";
         var adminFullName = "مدير النظام";
 
+
         var admin = await context.Users.FirstOrDefaultAsync(u => u.Role == "admin" || u.Username == adminUsername);
+
 
         if (admin == null)
         {
@@ -85,11 +96,14 @@ public static class DbInitializer
             context.Users.Update(admin);
         }
 
+
         await context.SaveChangesAsync();
+
 
         // Output seeded credentials so developer can log in
         Console.WriteLine($"[DbInitializer] Admin credentials -> username: '{adminUsername}', password: '{adminPassword}'");
     }
+
 
     private static async Task SeedNormalUsers(AppDbContext context, IPasswordHasher hasher)
     {
@@ -98,7 +112,9 @@ public static class DbInitializer
         var normalPassword = "user1234";
         var normalFullName = "موظف مركز الاتصال";
 
+
         var normalUser = await context.Users.FirstOrDefaultAsync(u => u.Username == normalUsername);
+
 
         if (normalUser == null)
         {
@@ -124,11 +140,14 @@ public static class DbInitializer
             context.Users.Update(normalUser);
         }
 
+
         await context.SaveChangesAsync();
+
 
         // Output seeded credentials
         Console.WriteLine($"[DbInitializer] Normal user credentials -> username: '{normalUsername}', password: '{normalPassword}'");
     }
+
 
     private static async Task SeedSizes(AppDbContext context)
     {
@@ -144,6 +163,7 @@ public static class DbInitializer
         }
     }
 
+
     private static async Task SeedPortions(AppDbContext context)
     {
         if (!await context.Portions.AnyAsync())
@@ -157,6 +177,7 @@ public static class DbInitializer
             await context.SaveChangesAsync();
         }
     }
+
 
     private static async Task SeedPlateTypes(AppDbContext context)
     {
@@ -173,6 +194,7 @@ public static class DbInitializer
         }
     }
 
+
     private static async Task SeedCategories(AppDbContext context)
     {
         if (!await context.Categories.AnyAsync())
@@ -187,6 +209,7 @@ public static class DbInitializer
             await context.SaveChangesAsync();
         }
     }
+
 
     private static async Task SeedAreas(AppDbContext context)
     {
@@ -209,6 +232,7 @@ public static class DbInitializer
             await context.SaveChangesAsync();
         }
     }
+    
     private static async Task SeedEidDays(AppDbContext context)
     {
         var count = await context.EidDays.CountAsync();
@@ -217,17 +241,22 @@ public static class DbInitializer
         {
             Console.WriteLine("[DbInitializer] Seeding EidDays...");
             var eidDays = new List<EidDay>();
-            var startDate = DateTime.Today;
+            
+            // ✅ FIX: Use DateTime.UtcNow instead of DateTime.Today to ensure UTC
+            var startDate = DateTime.UtcNow.Date;
+
 
             string[] namesAr = {
                 "اليوم الأول", "اليوم الثاني", "اليوم الثالث", "اليوم الرابع", "اليوم الخامس",
                 "اليوم السادس", "اليوم السابع", "اليوم الثامن", "اليوم التاسع", "اليوم العاشر"
             };
 
+
             string[] namesEn = {
                 "Day 1", "Day 2", "Day 3", "Day 4", "Day 5",
                 "Day 6", "Day 7", "Day 8", "Day 9", "Day 10"
             };
+
 
             for (int i = 0; i < 10; i++)
             {
@@ -235,18 +264,21 @@ public static class DbInitializer
                 {
                     NameAr = namesAr[i],
                     NameEn = namesEn[i],
-                    Date = startDate.AddDays(i),
+                    // ✅ FIX: Specify DateTimeKind.Utc when adding days
+                    Date = DateTime.SpecifyKind(startDate.AddDays(i), DateTimeKind.Utc),
                     DayNumber = i + 1,
                     IsActive = true,
                     SortOrder = i + 1
                 });
             }
 
+
             context.EidDays.AddRange(eidDays);
             await context.SaveChangesAsync();
             Console.WriteLine("[DbInitializer] EidDays seeded.");
         }
     }
+
 
     private static async Task SeedPeriods(AppDbContext context)
     {
@@ -262,11 +294,13 @@ public static class DbInitializer
                 new DayPeriod { NameAr = "الفترة الثالثة", NameEn = "Period 3", StartTime = new TimeSpan(14, 0, 0), EndTime = new TimeSpan(17, 0, 0), SortOrder = 3, IsActive = true }
             };
 
+
             context.DayPeriods.AddRange(periods);
             await context.SaveChangesAsync();
             Console.WriteLine("[DbInitializer] DayPeriods seeded.");
         }
     }
+
 
     private static async Task SeedProducts(AppDbContext context)
     {
@@ -278,6 +312,7 @@ public static class DbInitializer
             var category = await context.Categories.FirstAsync();
             var size = await context.Sizes.FirstAsync();
             var portion = await context.Portions.FirstAsync();
+
 
             var product = new Product
             {
@@ -291,6 +326,7 @@ public static class DbInitializer
             };
             context.Products.Add(product);
             await context.SaveChangesAsync();
+
 
             var price = new ProductPrice
             {
@@ -306,6 +342,7 @@ public static class DbInitializer
         }
     }
 
+
     private static async Task SeedEidDayPeriods(AppDbContext context)
     {
         var count = await context.EidDayPeriods.CountAsync();
@@ -316,6 +353,7 @@ public static class DbInitializer
             var eidDay = await context.EidDays.FirstAsync();
             var period = await context.DayPeriods.FirstAsync();
             var category = await context.Categories.FirstAsync();
+
 
             // First create DayPeriodCategory
             var dpc = await context.DayPeriodCategories
@@ -332,6 +370,7 @@ public static class DbInitializer
                 await context.SaveChangesAsync();
             }
 
+
             var edp = new EidDayPeriod
             {
                 EidDayId = eidDay.EidDayId,
@@ -345,6 +384,7 @@ public static class DbInitializer
             Console.WriteLine("[DbInitializer] EidDayPeriods seeded.");
         }
     }
+
 
     private static async Task SeedTestData(AppDbContext context)
     {
@@ -369,6 +409,7 @@ public static class DbInitializer
         {
             customer = await context.Customers.FirstAsync();
         }
+
 
         var addressesCount = await context.CustomerAddresses.CountAsync(a => a.CustomerId == customer.CustomerId);
         Console.WriteLine($"[DbInitializer] Addresses count for Customer {customer.CustomerId}: {addressesCount}");
