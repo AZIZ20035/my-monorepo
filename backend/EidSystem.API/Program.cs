@@ -15,17 +15,44 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Kestrel to listen on Railway's PORT
+// Configure Kestrel to listen on Railway's PORT
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-// Add DbContext
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? builder.Configuration["DATABASE_URL"];
+// Add DbContext with URL format conversion
+var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
-var databaseUrl = builder.Configuration["DATABASE_URL"];
+Console.WriteLine($"Raw connection string: {rawConnectionString}");
 
-Console.WriteLine($"ConnectionString from appsettings: {connectionString}");
-Console.WriteLine($"DATABASE_URL from env: {databaseUrl}");
+// Convert Railway's postgresql:// URL to Npgsql format
+string connectionString = rawConnectionString ?? "";
+
+if (!string.IsNullOrEmpty(connectionString) &&
+    (connectionString.StartsWith("postgresql://") || connectionString.StartsWith("postgres://")))
+{
+    try
+    {
+        var uri = new Uri(connectionString);
+        var userInfo = uri.UserInfo.Split(':');
+
+        connectionString = $"Host={uri.Host};" +
+                          $"Port={uri.Port};" +
+                          $"Database={uri.AbsolutePath.TrimStart('/')};" +
+                          $"Username={userInfo[0]};" +
+                          $"Password={userInfo[1]};" +
+                          $"SSL Mode=Require;" +
+                          $"Trust Server Certificate=true";
+
+        Console.WriteLine($"Converted to Npgsql format successfully");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error converting connection string: {ex.Message}");
+    }
+}
+
+Console.WriteLine($"Final connection string format: Host={connectionString.Split(';')[0]}");
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -34,6 +61,7 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
 
 // Add Repositories
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
