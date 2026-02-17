@@ -69,7 +69,7 @@ public static class DbInitializer
                 FullName = adminFullName,
                 Role = "admin",
                 IsActive = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             context.Users.Add(admin);
         }
@@ -81,7 +81,7 @@ public static class DbInitializer
             admin.FullName = adminFullName;
             admin.Role = "admin";
             admin.IsActive = true;
-            admin.UpdatedAt = DateTime.Now;
+            admin.UpdatedAt = DateTime.UtcNow;
             context.Users.Update(admin);
         }
 
@@ -109,7 +109,7 @@ public static class DbInitializer
                 FullName = normalFullName,
                 Role = "call_center",
                 IsActive = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             context.Users.Add(normalUser);
         }
@@ -120,7 +120,7 @@ public static class DbInitializer
             normalUser.FullName = normalFullName;
             normalUser.Role = "call_center";
             normalUser.IsActive = true;
-            normalUser.UpdatedAt = DateTime.Now;
+            normalUser.UpdatedAt = DateTime.UtcNow;
             context.Users.Update(normalUser);
         }
 
@@ -287,7 +287,7 @@ public static class DbInitializer
                 PlateOption = "required",
                 IsActive = true,
                 SortOrder = 1,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             context.Products.Add(product);
             await context.SaveChangesAsync();
@@ -360,7 +360,7 @@ public static class DbInitializer
                 Name = "تجربة عميل",
                 Phone = "0500000000",
                 ServiceStatus = "active",
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             context.Customers.Add(customer);
             await context.SaveChangesAsync();
@@ -384,7 +384,7 @@ public static class DbInitializer
                 AddressDetails = "شارع الاختبار، مجمع التجربة",
                 Label = "المنزل",
                 IsDefault = true,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
             context.CustomerAddresses.Add(address);
             await context.SaveChangesAsync();
