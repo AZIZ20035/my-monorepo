@@ -228,7 +228,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.OrderId);
-            entity.Property(e => e.OrderId).UseIdentityColumn(100, 1);
+            entity.Property(e => e.OrderId).UseIdentityByDefaultColumn();
             entity.Property(e => e.Subtotal).HasPrecision(10, 2);
             entity.Property(e => e.DeliveryCost).HasPrecision(10, 2);
             entity.Property(e => e.TotalCost).HasPrecision(10, 2);
