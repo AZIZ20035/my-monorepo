@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+@theme {
+  /* Restaurant Brand Colors */
+  --color-brand-white: #ffffff;
+  --color-brand-ice: #cadeef;
+  --color-brand-sky: #9bd4e4;
+  --color-brand-blue: #39ace7;
+  --color-brand-deep: #0784b5;
+
+  /* Primary scale based on brand */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #dff1fb;
+  --color-primary-200: #cadeef;
+  --color-primary-300: #9bd4e4;
+  --color-primary-400: #39ace7;
+  --color-primary-500: #0784b5;
+  --color-primary-600: #066a92;
+  --color-primary-700: #055574;
+  --color-primary-800: #044059;
+  --color-primary-900: #032d3f;
+  --color-primary-950: #021c28;
+
+  /* Secondary / Neutral */
+  --color-secondary-50: #f8fafc;
+  --color-secondary-100: #f1f5f9;
+  --color-secondary-200: #e2e8f0;
+  --color-secondary-300: #cbd5e1;
+  --color-secondary-400: #94a3b8;
+  --color-secondary-500: #64748b;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1e293b;
+  --color-secondary-900: #0f172a;
+  --color-secondary-950: #020617;
+
+  /* Functional Colors */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
+  --color-info: #0784b5;
+
+  /* Typography */
+  --font-cairo: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+
+  /* Spacing */
+  --spacing-container: 2rem;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+:root {
+  --background: #ffffff;
+  /* Pure White for maximum clarity */
+  --foreground: #0f172a;
+  /* Slate-900 */
+
+  --primary: #0784b5;
+  --primary-foreground: #ffffff;
+
+  --secondary: #ffffff;
+  /* Set to pure white as requested */
+  --secondary-foreground: #0f172a;
+
+  --muted: #f8fafc;
+  /* Very light slate for subtle contrast */
+  --muted-foreground: #64748b;
+
+  --accent: #e0f2fe;
+  --accent-foreground: #0369a1;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #39ace7;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  /* Increased opacity for cleaner white containers */
+  --glass-border: rgba(255, 255, 255, 0.6);
+
+  --sidebar-bg: #f0f7ff;
+  /* Distinct light blue for sidebar */
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #020617;
+  /* Deepest Navy */
+  --foreground: #f1f5f9;
+  /* Slate-100 */
+
+  --primary: #39ace7;
+  --primary-foreground: #ffffff;
+
+  --secondary: #0f172a;
+  /* Slate-900 */
+  --secondary-foreground: #f1f5f9;
+
+  --muted: #1e293b;
+  /* Slate-800 */
+  --muted-foreground: #94a3b8;
+
+  --accent: #0c4a6e;
+  /* Sky-900 */
+  --accent-foreground: #e0f2fe;
+
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #0784b5;
+
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(30, 41, 59, 0.5);
+
+  --sidebar-bg: #0f172a;
+  /* Matching secondary for dark mode */
+}
+
+html.dark {
+  background-color: #020617 !important;
+}
+
+@layer base {
+
+  *,
+  ::after,
+  ::before {
+    border-color: var(--border);
+  }
+
+  html,
+  body {
+    height: 100%;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-cairo);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+
+  66% {
+    transform: translateY(6px) rotate(-1deg);
+  }
+}
+
+@keyframes blob {
+
+  0%,
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+
+  50% {
+    border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+  }
+
+  75% {
+    border-radius: 60% 40% 60% 30% / 60% 40% 30% 70%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+
+@keyframes wave {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave 2s ease-in-out infinite;
+}
+
+/* ── Performance-optimized background animations (CSS compositor thread) ── */
+@keyframes orb-float {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: var(--orb-opacity, 0.2);
+  }
+
+  33% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: calc(var(--orb-opacity, 0.2) * 2);
+  }
+
+  66% {
+    transform: scale(0.85) rotate(-3deg);
+    opacity: calc(var(--orb-opacity, 0.2) * 0.7);
+  }
+}
+
+@keyframes sparkle-pulse {
+
+  0%,
+  100% {
+    transform: scale(0.3) translateY(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2) translateY(-20px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes beam-sweep {
+  0% {
+    transform: translateX(-100vw) rotate(20deg);
+  }
+
+  100% {
+    transform: translateX(100vw) rotate(20deg);
+  }
+}
+
+@keyframes wave-drift {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes wave-drift-alt {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px) translateX(8px);
+  }
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+.animate-orb-float {
+  animation: orb-float ease-in-out infinite;
+}
+
+.animate-sparkle-pulse {
+  animation: sparkle-pulse ease-in-out infinite;
+}
+
+.animate-beam-sweep {
+  animation: beam-sweep 9s ease-in-out infinite;
+}
+
+.animate-wave-drift {
+  animation: wave-drift 6s ease-in-out infinite;
+}
+
+.animate-wave-drift-alt {
+  animation: wave-drift-reverse 8s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .blue-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .blue-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .blue-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+    opacity: 0.5;
+  }
+
+  .blue-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--ring);
+  }
+
+  /* Firefox support */
+  .blue-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+  }
+
+  /* Premium Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+
+  /* Firefox Support */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}
