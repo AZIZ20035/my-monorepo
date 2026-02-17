@@ -22,6 +22,16 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? builder.Configuration["DATABASE_URL"];
 
+var databaseUrl = builder.Configuration["DATABASE_URL"];
+
+Console.WriteLine($"ConnectionString from appsettings: {connectionString}");
+Console.WriteLine($"DATABASE_URL from env: {databaseUrl}");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Database connection string is not configured!");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
