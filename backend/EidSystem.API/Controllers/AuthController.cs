@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EidSystem.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
