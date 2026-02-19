@@ -171,9 +171,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() 
-            ?? new[] { "http://localhost:3000", "http://localhost:5173" };
-        
+        var allowedOrigins = new[] {
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://fronted-production-518b.up.railway.app/"  // Add your frontend URL
+};
+
         policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
               .AllowAnyHeader()
